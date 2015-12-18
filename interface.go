@@ -5,4 +5,5 @@ type StackError interface {
 	Stack() []byte
 	StackFrames() []StackFrame
 	ErrorStack() string
+	TypeName() string
 }

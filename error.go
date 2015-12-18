@@ -16,7 +16,7 @@
 //  var Crashed = errors.Errorf("oh dear")
 //
 //  func Crash() error {
-//      return errors.New(Crashed)
+//      return errors.NewStackError(Crashed)
 //  }
 //
 // This can be called as follows:
@@ -68,8 +68,12 @@ type Error struct {
 // error then it will be used directly, if not, it will be passed to
 // fmt.Errorf("%v"). The stacktrace will point to the line of code that
 // called New.
-func New(e interface{}) *Error {
+func NewStackError(e interface{}) StackError {
 	if e == nil {
+		return nil
+	}
+	v := reflect.ValueOf(e)
+	if v.Kind() == reflect.Ptr && v.IsNil() {
 		return nil
 	}
 	var err error
@@ -87,13 +91,6 @@ func New(e interface{}) *Error {
 		Err:   err,
 		stack: stack[:length],
 	}
-}
-
-func NewStackError(e interface{}) StackError {
-	if e == nil {
-		return nil
-	}
-	return New(e)
 }
 
 // Wrap makes an Error from the given value. If that value is already an

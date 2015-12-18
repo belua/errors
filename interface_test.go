@@ -3,7 +3,7 @@ package errors
 import "testing"
 
 func TestInterfaceImplemented(t *testing.T) {
-	acceptStackError(New("Test error"))
+	acceptStackError(NewStackError("Test error"))
 }
 
 func acceptStackError(err StackError) {
