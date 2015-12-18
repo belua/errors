@@ -16,7 +16,7 @@
 //  var Crashed = errors.Errorf("oh dear")
 //
 //  func Crash() error {
-//      return errors.NewStackError(Crashed)
+//      return errors.New(Crashed)
 //  }
 //
 // This can be called as follows:

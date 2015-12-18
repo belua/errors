@@ -86,6 +86,21 @@ func TestNewStackError(t *testing.T) {
 	}
 }
 
+func TestNilError(t *testing.T) {
+	var nilErr error
+	if NewStackError(nilErr) != nil {
+		t.Errorf("StackError should be nil")
+	}
+	var nilError *Error
+	if NewStackError(nilError) != nil {
+		t.Errorf("StackError should be nil")
+	}
+	var emptyString string
+	if NewStackError(emptyString) == nil {
+		t.Errorf("StackError should not be nil")
+	}
+}
+
 func TestIs(t *testing.T) {
 
 	if Is(nil, io.EOF) {
