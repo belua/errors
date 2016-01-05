@@ -69,6 +69,14 @@ type Error struct {
 // fmt.Errorf("%v"). The stacktrace will point to the line of code that
 // called New.
 func NewStackError(e interface{}) StackError {
+	return NewPrefixStackError(e, "")
+}
+
+// New makes an Error from the given value. If that value is already an
+// error then it will be used directly, if not, it will be passed to
+// fmt.Errorf("%v"). The stacktrace will point to the line of code that
+// called New.
+func NewPrefixStackError(e interface{}, prefix string) StackError {
 	if e == nil {
 		return nil
 	}
@@ -76,8 +84,8 @@ func NewStackError(e interface{}) StackError {
 	if v.Kind() == reflect.Ptr && v.IsNil() {
 		return nil
 	}
-	var err error
 
+	var err error
 	switch e := e.(type) {
 	case error:
 		err = e
@@ -88,8 +96,9 @@ func NewStackError(e interface{}) StackError {
 	stack := make([]uintptr, MaxStackDepth)
 	length := runtime.Callers(2, stack[:])
 	return &Error{
-		Err:   err,
-		stack: stack[:length],
+		prefix: prefix,
+		Err:    err,
+		stack:  stack[:length],
 	}
 }
 
